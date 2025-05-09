@@ -148,7 +148,7 @@ class Spider(Spider):
                 'vod_remarks': v.get('rc_title'),
                 'vod_actor': v.get('_personNameStr'),
                 'vod_content': v.get('showdesc'),
-                'vod_play_from': '优酷',
+                'vod_play_from': '欧歌',
                 'vod_play_url': ''
             }
             params={"biz":"new_detail_web2","videoId":v.get('vid'),"scene":"web_page","componentVersion":"3","ip":data.get('ip'),"debug":0,"utdid":"ZYmGMAAAACkDAMU8hbiMmYdd","userId":0,"platform":"pc","nextSession":"","gray":0,"source":"pcNoPrev","showId":ids[0]}
