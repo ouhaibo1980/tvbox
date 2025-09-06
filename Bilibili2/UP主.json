@@ -1,6 +1,6 @@
 {
  
-  "classes": [
+  "class": [
 
  {
       "type_name": "B笔记本维厮",
@@ -15,7 +15,7 @@
 
 
   ],
-  "filter": {
+  "filters": {
     "笔记本维厮": [
       {
         "key": "duration",

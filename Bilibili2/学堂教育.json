@@ -1,7 +1,7 @@
 
 {
   
-  "classes": [
+  "class": [
 
     {
       "type_name": "儿童早教",
@@ -363,7 +363,7 @@
 
 
   ],
-  "filter": {
+  "filters": {
    
     "1年级语文": [
       {

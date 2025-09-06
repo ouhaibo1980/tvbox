@@ -1,5 +1,5 @@
 ﻿{  
-	"classes": [
+	"class": [
 	//百科
 		{"type_name":"百科","type_id": "10天玩转世界top10博物馆"},
 		{"type_name":"世界博物馆","type_id": "玩转世界博物馆第二季"},
@@ -65,7 +65,7 @@
 		{"type_name":"讲给孩子的希腊神话故事","type_id": "小灯塔讲给孩子的希腊神话故事"}
 	],
 	// 筛选条件字典
-	"filter":{
+	"filters":{
 		//百科
 		"10天玩转世界top10博物馆":[
 			{"key":"tid","name":"分类","value":[

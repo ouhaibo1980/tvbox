@@ -1,5 +1,5 @@
 {   
-  "classes": [
+  "class": [
     {
       "type_name": "京剧",
       "type_id": "京剧"
@@ -179,7 +179,7 @@
       "type_id": "高腔"
     }
   ],
-  "filter": {
+  "filters": {
     "搞笑": [
       {
         "key": "duration",

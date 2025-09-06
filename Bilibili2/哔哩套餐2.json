@@ -1,6 +1,6 @@
 {    "cookie": "http://127.0.0.1:9978/file/TVBox/bili_cookie.txt",
 
-  "classes": [
+  "class": [
     
     {
       "type_name": "小姐姐",
@@ -91,7 +91,7 @@
       "type_id": "凡人修仙传"
     }
   ],
-  "filter": {
+  "filters": {
     "搞笑": [
       {
         "key": "duration",

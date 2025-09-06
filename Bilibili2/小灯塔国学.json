@@ -1,5 +1,5 @@
 ﻿{   
-	"classes": [
+	"class": [
 
 	//国学
 		{"type_name":"国学","type_id": "神奇的汉字故事 全20集"},
@@ -66,7 +66,7 @@
 		{"type_name":" 非洲大冒险","type_id": "小灯塔 非洲大冒险"}
 	],
 	// 筛选条件字典
-	"filter":{
+	"filters":{
 		//百科
 		"10天玩转世界top10博物馆":[
 			{"key":"tid","name":"分类","value":[

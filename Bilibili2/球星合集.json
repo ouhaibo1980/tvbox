@@ -1,6 +1,6 @@
 {  
 
-  "classes": [
+  "class": [
     {
       "type_name": "梅西",
       "type_id": "梅西"
@@ -103,7 +103,7 @@
     
   
   ],
-  "filter": {
+  "filters": {
     "搞笑": [
       {
         "key": "duration",

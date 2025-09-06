@@ -1,5 +1,5 @@
 {   
-  "classes": [
+  "class": [
     
     {
       "type_name": "足球",
@@ -122,7 +122,7 @@
 
 
   ],
-  "filter": {
+  "filters": {
    
     "足球": [
       {

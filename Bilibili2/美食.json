@@ -1,5 +1,5 @@
 {   
-  "classes": [
+  "class": [
 
     {
       "type_name": "美食",
@@ -188,7 +188,7 @@
 
 
   ],
-  "filter": {
+  "filters": {
    
 
 "美食": [

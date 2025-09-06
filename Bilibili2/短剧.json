@@ -1,5 +1,5 @@
 {  
-  "classes": [
+  "class": [
     {
       "type_name": "短剧",
       "type_id": "短剧"
@@ -9,7 +9,7 @@
       "type_id": "沙雕动画"
     }
   ],
-  "filter": {
+  "filters": {
     "短剧": [
       {
         "key": "duration",
