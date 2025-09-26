@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const OVERLAY_TIMEOUT = 36e5 * 1; 
     const overlay = document.getElementById('overlay');
     let clicks = 0;
-    const sx = window.SX_VALUE || 3; // 默认为3次点击
+    const sx = window.SX_VALUE || 999; 
 
     const shouldShow = () => {
         const lastClick = localStorage.getItem('lastClick');
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     overlay.addEventListener('click', () => {
         clicks++;
-        console.log(`点击次数: ${clicks}/${sx}`); // 调试用
+        console.log(`点击次数: ${clicks}/${sx}`); 
         
         if (clicks >= sx) {
             overlay.style.opacity = '0';
