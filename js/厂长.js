@@ -7,7 +7,8 @@ title: '厂长资源', author: '小可乐/v6.1.1'
 }
 */
 
-const MOBILE_UA = 'Mozilla/5.0 (Linux; Android 6.0.1; OPPO R9s Plus Build/MMB29M; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/55.0.2883.91 Mobile Safari/537.36';
+const MOBILE_UA = 'Mozilla/5.0 (Linux; Android 6.0.1; OPPO R9s Plus Build/MMB29M; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/131.0.6778.260 Mobile Safari/537.36';
+
 const DefHeader = {'User-Agent': MOBILE_UA};
 var HOST;
 var KParams = {
@@ -17,7 +18,7 @@ var KParams = {
 
 async function init(cfg) {
     try {
-        HOST = (cfg.ext?.host?.trim() || 'https://www.cz01.org').replace(/\/$/, '');
+        HOST = (cfg.ext?.host?.trim() || 'https://www.czzymovie.com').replace(/\/$/, '');
         KParams.headers['Referer'] = HOST;
         let parseTimeout = parseInt(cfg.ext?.timeout?.trim(), 10);
         if (parseTimeout > 0) {KParams.timeout = parseTimeout;}
