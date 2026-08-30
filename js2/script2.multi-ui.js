@@ -1,10 +1,5 @@
 (function () {
     'use strict';
-
-    /* ----------------------------------------------------------------
-     * 1. 极速样式拦截 —— 不等 <body> 创建，直接把 CSS 挂到 <html> 根节点
-     *    浏览器在渲染第一帧时页面即带渐变背景并锁定滚动，杜绝“闪屏”。
-     * ---------------------------------------------------------------- */
     const styleText = `
         html, body {
             width: 100vw !important;
@@ -22,7 +17,7 @@
             width: 100vw !important;
             height: 100vh !important;
             z-index: 2147483647 !important;
-            /* 背景色由随机界面在 JS 中注入（含 !important），此处仅作默认值 */
+          
             background: linear-gradient(45deg, #ffd800, #ff512f, #00ffcc, #cc00ff, #ffd800) !important;
             background-size: 400% 400% !important;
             animation: tvboxBgShift 12s ease infinite !important;
@@ -44,8 +39,7 @@
             to   { opacity: 1; transform: translateY(0); }
         }
 
-        /* 弹窗基类：负责圆角 / 阴影 / 内边距 / 字体 / 入场动画。
-           具体配色由各界面在 HTML 内联样式中覆盖。 */
+      
         .tvbox-modal {
             max-width: 460px;
             width: 100%;
@@ -61,15 +55,11 @@
     `;
 
     const style = document.createElement('style');
-    style.id = 'tvbox-farewell-style'; // 便于关闭时移除，解除滚动锁定
+    style.id = 'tvbox-farewell-style'; 
     style.textContent = styleText;
-    document.documentElement.appendChild(style); // 挂在 <html> 上，无需等待 <head>
+    document.documentElement.appendChild(style); 
 
-    /* ----------------------------------------------------------------
-     * 2. 多个界面（随机选取）
-     *    每个界面自带：coverBg（遮罩流动渐变背景）+ card（弹窗 HTML）。
-     *    文案统一为“站点已关闭 / FRONTEND SERVICE CLOSED”，仅视觉不同。
-     * ---------------------------------------------------------------- */
+
     const VARIANTS = [
         // 0 · 经典白卡
         {
@@ -147,17 +137,12 @@
         }
     ];
 
-    // 每次加载随机选一个界面
+
     const variant = VARIANTS[Math.floor(Math.random() * VARIANTS.length)];
 
-    /* ----------------------------------------------------------------
-     * 3. 点击关闭 + 36 分钟免重复展示（来自“社会主义核心价值观”遮罩逻辑）
-     * ---------------------------------------------------------------- */
-    const OVERLAY_TIMEOUT = 36 * 60 * 1000; // 36 分钟内不再强制展示
+    
     let clicks = 0;
-    let sx = 888; // 默认需点击次数
-
-    // ?ou=N 自定义点击次数（1–9999）
+    let sx = 888; 
     const ouRaw = new URLSearchParams(location.search).get('ou');
     if (ouRaw !== null) {
         const num = parseInt(ouRaw, 10);
@@ -169,7 +154,7 @@
         document.documentElement.style.overflow = 'auto';
     }
 
-    // animated=true 时淡出后移除；false 时立即移除（用于“已点过”免展示）
+
     function removeCover(animated) {
         const cover = document.getElementById('tvbox-farewell-cover');
         if (!cover) return;
@@ -177,7 +162,7 @@
         const finalize = () => {
             cover.remove();
             const s = document.getElementById('tvbox-farewell-style');
-            if (s) s.remove(); // 一并解除 html/body 的滚动锁定
+            if (s) s.remove(); 
             unlockScroll();
         };
         if (animated) {
@@ -188,36 +173,31 @@
         }
     }
 
-    /* ----------------------------------------------------------------
-     * 4. 注入遮罩 DOM 并绑定交互
-     * ---------------------------------------------------------------- */
+    
     function injectCover() {
-        if (document.getElementById('tvbox-farewell-cover')) return; // 防止重复注入
+        if (document.getElementById('tvbox-farewell-cover')) return; 
         const cover = document.createElement('div');
         cover.id = 'tvbox-farewell-cover';
-        // 注入本界面专属的流动渐变背景
+    
         cover.style.setProperty('background', variant.bg, 'important');
         cover.style.setProperty('background-size', '400% 400%', 'important');
         cover.innerHTML = variant.card;
 
-        // 点击 sx 次关闭遮罩
+      
         cover.addEventListener('click', () => {
             if (++clicks >= sx) removeCover(true);
         });
 
-        // 插入为 body 的第一个子元素，压制后续加载的所有元素
+       
         document.body.insertBefore(cover, document.body.firstChild);
 
-        // 36 分钟内已点过 → 直接放行，不强制展示
+        
         const lastClick = localStorage.getItem('lastClick');
         const shouldShow = !lastClick || Date.now() - Number(lastClick) > OVERLAY_TIMEOUT;
         if (!shouldShow) removeCover(false);
     }
 
-    /* ----------------------------------------------------------------
-     * 5. 全局防护 —— 右键 / 开发者工具快捷键拦截
-     *    （来自“社会主义核心价值观”遮罩的防护逻辑）
-     * ---------------------------------------------------------------- */
+   
     document.addEventListener('contextmenu', (e) => e.preventDefault());
     document.addEventListener('keydown', (e) => {
         if ((e.ctrlKey && [85, 83].includes(e.keyCode)) || e.keyCode === 123) {
@@ -226,17 +206,14 @@
         }
     });
 
-    /* ----------------------------------------------------------------
-     * 6. MutationObserver 极限拦截
-     *    若执行时 <body> 尚未生成，则观察 <html> 直到 body 出现立即注入。
-     * ---------------------------------------------------------------- */
+    
     if (document.body) {
         injectCover();
     } else {
         const observer = new MutationObserver(function (mutations, obs) {
             if (document.body) {
                 injectCover();
-                obs.disconnect(); // 任务完成，销毁观察者以节约性能
+                obs.disconnect(); 
             }
         });
         observer.observe(document.documentElement, { childList: true, subtree: true });
