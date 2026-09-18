@@ -22,60 +22,41 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: 获取远程哈希
-        id: hash
+      - name: Check hash
+        id: chk
         run: |
           REMOTE=$(curl -fsSL --max-time 30 "$HASH_API" | tr -d '[:space:]')
           LOCAL="none"
-          [ -f .hash ] && LOCAL=$(cat .hash | tr -d '[:space:]')
-
-          echo "远程: $REMOTE"
-          echo "本地: $LOCAL"
-
+          if [ -f .hash ]; then
+            LOCAL=$(cat .hash | tr -d '[:space:]')
+          fi
+          echo "remote=$REMOTE"
+          echo "local=$LOCAL"
           if [ "$REMOTE" = "$LOCAL" ]; then
-            echo "skip=true" >> "$GITHUB_OUTPUT"
-            echo "✓ 无变化"
+            echo "skip=yes" >> "$GITHUB_OUTPUT"
           else
-            echo "skip=false" >> "$GITHUB_OUTPUT"
-            echo "md5=$REMOTE" >> "$GITHUB_OUTPUT"
-            echo "⬆ 有更新"
+            echo "skip=no" >> "$GITHUB_OUTPUT"
+            echo "newmd5=$REMOTE" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: 下载并解压到根目录
-        if: steps.hash.outputs.skip != 'true'
+      - name: Download and extract
+        if: steps.chk.outputs.skip == 'no'
         run: |
-          # 备份 .github
-          cp -r .github /tmp/_bk_github 2>/dev/null || true
-
-          # 下载到仓库根目录
+          cp -r .github /tmp/_bk 2>/dev/null || true
           curl -fsSL --max-time 120 -o tvbox.zip "$ZIP_URL"
-          echo "大小: $(du -h tvbox.zip | cut -f1)"
-
-          # 校验
-          unzip -t tvbox.zip || { echo "❌ ZIP损坏"; exit 1; }
-
-          # 解压到根目录
+          unzip -t tvbox.zip
           unzip -o tvbox.zip
           rm -f tvbox.zip
-
-          # 恢复 .github
           rm -rf .github
-          cp -r /tmp/_bk_github .github 2>/dev/null || true
+          cp -r /tmp/_bk .github 2>/dev/null || true
 
-          echo "✓ 解压完成"
-
-      - name: 推送更新
-        if: steps.hash.outputs.skip != 'true'
+      - name: Commit and push
+        if: steps.chk.outputs.skip == 'no'
         run: |
-          # 保存哈希
-          echo "${{ steps.hash.outputs.md5 }}" > .hash
-
-          git config user.name  "github-actions[bot]"
+          echo "${{ steps.chk.outputs.newmd5 }}" > .hash
+          git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -A
-
-          git diff --cached --quiet && echo "无实际变化" && exit 0
-
+          git diff --cached --quiet && exit 0
           git commit -m "[auto-pull] $(date '+%Y-%m-%d %H:%M')"
           git push
-          echo "✓ 已推送"
