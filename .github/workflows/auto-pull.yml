@@ -42,7 +42,7 @@ jobs:
           fi
 
       - name: 下载并解压到根目录
-        if: hash.outputs.skip != 'true'
+        if: steps.hash.outputs.skip != 'true'
         run: |
           # 备份 .github
           cp -r .github /tmp/_bk_github 2>/dev/null || true
@@ -65,10 +65,10 @@ jobs:
           echo "✓ 解压完成"
 
       - name: 推送更新
-        if: hash.outputs.skip != 'true'
+        if: steps.hash.outputs.skip != 'true'
         run: |
           # 保存哈希
-          echo "${{ hash.outputs.md5 }}" > .hash
+          echo "${{ steps.hash.outputs.md5 }}" > .hash
 
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
