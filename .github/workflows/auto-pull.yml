@@ -1,4 +1,4 @@
-name: Auto Pull ZIP
+name: Pull
 
 on:
   schedule:
@@ -9,55 +9,46 @@ on:
 permissions:
   contents: write
 
-env:
-  ZIP_URL: "https://go1.nxog.top/ou.php/d/tvbox.zip?t=3600&u=aHR0cHM6Ly9nbzEubnhvZy50b3AvdHZib3guanBn&m=d"
-  HASH_API: "https://xn--vnu273b.xn--dkw.xn--6qq986b3xl/zipmd5.php"
-  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: "true"
-
 jobs:
-  pull:
+  run:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
+      - uses: actions/checkout@v5
 
-      - name: Check hash
-        id: chk
+      - name: 下载
         run: |
-          REMOTE=$(curl -fsSL --max-time 30 "$HASH_API" | tr -d '[:space:]')
-          LOCAL="none"
-          if [ -f .hash ]; then
-            LOCAL=$(cat .hash | tr -d '[:space:]')
-          fi
-          echo "remote=$REMOTE"
-          echo "local=$LOCAL"
-          if [ "$REMOTE" = "$LOCAL" ]; then
-            echo "skip=yes" >> "$GITHUB_OUTPUT"
-          else
-            echo "skip=no" >> "$GITHUB_OUTPUT"
-            echo "newmd5=$REMOTE" >> "$GITHUB_OUTPUT"
-          fi
+          curl -fsSL --max-time 120 -o /tmp/tvbox.zip \
+            "https://go1.nxog.top/ou.php/d/tvbox.zip?t=3600&u=aHR0cHM6Ly9nbzEubnhvZy50b3AvdHZib3guanBn&m=d"
+          ls -lh /tmp/tvbox.zip
+          file /tmp/tvbox.zip
 
-      - name: Download and extract
-        if: steps.chk.outputs.skip == 'no'
+      - name: 解压
         run: |
-          cp -r .github /tmp/_bk 2>/dev/null || true
-          curl -fsSL --max-time 120 -o tvbox.zip "$ZIP_URL"
-          unzip -t tvbox.zip
-          unzip -o tvbox.zip
-          rm -f tvbox.zip
+          mkdir -p /tmp/tvbox
+          unzip -o /tmp/tvbox.zip -d /tmp/tvbox
+
+          echo "=== ZIP 里面有什么 ==="
+          ls -la /tmp/tvbox/
+
+          cp -r .github /tmp/_gh 2>/dev/null || true
+
+          cp -r /tmp/tvbox/* .
+          cp -r /tmp/tvbox/.* . 2>/dev/null || true
+
           rm -rf .github
-          cp -r /tmp/_bk .github 2>/dev/null || true
+          cp -r /tmp/_gh .github 2>/dev/null || true
 
-      - name: Commit and push
-        if: steps.chk.outputs.skip == 'no'
+          echo "=== 现在仓库根目录 ==="
+          ls -la
+
+      - name: 推送
         run: |
-          echo "${{ steps.chk.outputs.newmd5 }}" > .hash
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -A
-          git diff --cached --quiet && exit 0
+          git status
+          git diff --cached --quiet && echo "无变化" && exit 0
           git commit -m "[auto-pull] $(date '+%Y-%m-%d %H:%M')"
           git push
