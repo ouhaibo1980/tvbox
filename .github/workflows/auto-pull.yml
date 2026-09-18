@@ -21,7 +21,7 @@ jobs:
         id: chk
         run: |
           REMOTE=$(curl -fsSL --max-time 30 \
-            "https://xn--vnu273b.xn--dkw.xn--6qq986b3xl/zipmd5.php" \
+            "https://a.nxog.eu.org/downloads/zipmd5.php" \
             | tr -d '[:space:]')
           LOCAL="none"
           [ -f .hash ] && LOCAL=$(cat .hash | tr -d '[:space:]')
@@ -37,7 +37,7 @@ jobs:
         if: steps.chk.outputs.skip == 'no'
         run: |
           curl -fsSL --max-time 120 -o /tmp/tvbox.zip \
-            "https://go1.nxog.top/ou.php/d/tvbox.zip?t=3600&u=aHR0cHM6Ly9nbzEubnhvZy50b3AvdHZib3guanBn&m=d"
+            "https://a.nxog.eu.org/downloads/tvbox.zip"
           ls -lh /tmp/tvbox.zip
 
       - name: 解压
