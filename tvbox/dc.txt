@@ -1,7 +1,7 @@
 {"urls":[{"url":"clan://localhost/tvbox/cache/888.html","name":"👇收集网络线路👇"},
 {"url":"clan://localhost/tvbox/cache/1.html","name":"🌟1饭太硬线路1🌟"},
 {"url":"clan://localhost/tvbox/cache/2.html","name":"🌟2光歌云盘2🌟"},
-{"url":"clan://localhost/tvbox/cache/3.html","name":"🌟3盒子迷线路3🌟"},
+{"url":"clan://localhost/tvbox/cache/3.html","name":"🌟3摸鱼线路3🌟"},
 {"url":"clan://localhost/tvbox/cache/4.html","name":"🌟4肥猫线路4🌟"},
 {"url":"clan://localhost/tvbox/cache/5.html","name":"🌟5潇洒改版闪退5🌟"},
 {"url":"clan://localhost/tvbox/cache/6.html","name":"🌟6东篱线路6🌟"},
